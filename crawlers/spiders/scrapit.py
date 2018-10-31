@@ -1,4 +1,9 @@
 import scrapy
+import errorHandling
+
+from scrapy.spidermiddlewares.httperror import HttpError
+from twisted.internet.error import DNSLookupError
+from twisted.internet.error import TimeoutError, TCPTimedOutError
 
 class ScrapSpider(scrapy.Spider):
     name = "scrapit"
@@ -7,6 +12,7 @@ class ScrapSpider(scrapy.Spider):
         urls = [
            'http://www.dailyo.in/politics',
            'http://www.deccanchronicle.com/opinion',
+           "http://www.httpbin.org/",
         ]
         i = 0
         for url in urls:
