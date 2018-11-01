@@ -1,20 +1,20 @@
-
-
+import sys
+import collections
+import scrapy
+import json
 params = {
-    "title":"div > div > a > h3",
-    "link" : "div > div > a::attr(href)",
+    "title": "div > div > a > h3",
+    "link": "div > div > a::attr(href)",
 }
 
-def parsedeccanchronicle(logger, response):
-    # page = response.url.split("/")[-2]
-    # filename = 'news-%s.html' %(page)
-    # with open(filename, 'wb') as f:
-    #     f.write(response.body)
-    # logger.log('Saved file %s' % filename)
+deploy = {}
 
-    for news in response.css('div.opinionLanding'):
-        yield {
-            "title": news.css(params['title']+"::text").extract(),
-            "link": news.css(params['link']+"::text").extract(),
-            "source": response.url
-        }
+
+def parsedeccanchronicle(logger, response):
+    # page = 0
+    for news in response.css('.opinionLanding > div'):
+      
+        yield {"title": news.css("div > a > h3::text").extract(),
+               "link": news.css("div > a::attr(href)").extract(),
+            #    "source": response.url,
+               }
