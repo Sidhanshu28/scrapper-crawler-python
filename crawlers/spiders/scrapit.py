@@ -73,6 +73,6 @@ class ScrapSpider(scrapy.Spider):
         # with open('./counters/%s_daily-counters.json' %today, 'w') as fp:
         #         self.log(getCounter('daily'))
         #         json.dump(getCounter('daily'), fp)
-        
+
 
 

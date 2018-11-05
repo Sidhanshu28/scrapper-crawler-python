@@ -1,6 +1,7 @@
 import datetime
 import json
 import os.path
+from scheduler import csvExporter
 
 today = datetime.datetime.today().strftime('%Y-%m-%d')
 dailyZeroArray = {
@@ -25,6 +26,7 @@ def addCounter(domain):
         dailyCounterArray[domain] += 1
         with open('./counters/%s_daily-counters.json' % today, 'w') as fp:
             json.dump(dailyCounterArray, fp)
+        csvExporter()
     else:
         with open('./counters/%s_daily-counters.json' % today, 'w') as fp:
             json.dump(dailyZeroArray, fp)
@@ -34,3 +36,4 @@ def addCounter(domain):
         dailyCounterArray[domain] += 1
         with open('./counters/%s_daily-counters.json' % today, 'w') as fp:
             json.dump(dailyCounterArray, fp)
+        csvExporter()
