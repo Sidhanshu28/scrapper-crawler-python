@@ -1,0 +1,16 @@
+http://www.forbesindia.com/ = 
+for
+response.css(".carousel > .carousel-inner > .item")
+   res.css(".carousel-caption > h3 > a") (text and href both)
+
+
+http://www.frontline.in/ = 
+for
+response.css(".latestupdate > swiper-wrapper > .latestInner")
+    res.css(h2 > a) (text and href)
+
+http://www.hindustantimes.com/opinion/ = 
+for
+response.css(".headinfour")
+    res.css("a") text and href
+
