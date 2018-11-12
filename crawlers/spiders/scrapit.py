@@ -1,5 +1,6 @@
 import scrapy
 import datetime
+import re
 from errorHandling import errback_httpbin
 from makefolder import todayFolder
 import json
@@ -10,6 +11,8 @@ from scrapy.spidermiddlewares.httperror import HttpError
 from twisted.internet.error import DNSLookupError
 from twisted.internet.error import TimeoutError, TCPTimedOutError
 from databaseConnector import sendData
+from duplicateCheck import duplicates
+
 
 class ScrapSpider(scrapy.Spider):
     name = "scrapit"
@@ -52,7 +55,6 @@ class ScrapSpider(scrapy.Spider):
             request = scrapy.Request(
                 url=url, callback=self.parse, errback=errback_httpbin)
             yield request
-            # self.log(getCounter('daily'))
 
     def parse(self, response):
         today = datetime.datetime.today().strftime('%Y-%m-%d')
@@ -66,26 +68,45 @@ class ScrapSpider(scrapy.Spider):
             res2 = case.css('div.opnionTopBig')
             for news in res:
                 dcobj = {"title": news.css("a > h3::text").extract_first(),
-                         "link": domain + news.css("a::attr(href)").extract_first(),
+                        #  "meta": [{
+                             "link": domain + news.css("a::attr(href)").extract_first(),
+                            #  }],
                          "content": domain,
+                         "slug": news.css("a > h3::text").extract_first(),
                          "status": "publish"
                          }
-                # data sender function
-                sendData(dcobj)
-                # yield deploy
-                deccanchroniclearray.append(dcobj.copy())
-                addCounter(domain)
+                title = (news.css("a > h3::text").extract_first()
+                         ).replace(",", "")
+                new_title = '-'.join(title.split(" "))
+                self.log(new_title.lower())
+                duplicate = duplicates(new_title.lower())
+                if duplicate == 1:
+                    # data sender function
+                    sendData(dcobj)
+                    # yield deploy
+                    deccanchroniclearray.append(dcobj.copy())
+                    addCounter(domain)
             for news in res2:
                 dcobj = {"title": news.css("a > h3::text").extract_first(),
-                         "link": domain + news.css("a::attr(href)").extract_first(),
+                        #  "meta":[{
+                             "link": domain + news.css("a::attr(href)").extract_first(),
+                            #  }],
                          "content": domain,
+                         "slug": news.css("a > h3::text").extract_first(),
                          "status": "publish"
                          }
-               # data sender function
-                sendData(dcobj)
-                # yield deploy
-                deccanchroniclearray.append(dcobj.copy())
-                addCounter(domain)
+
+                title = (news.css("a > h3::text").extract_first()
+                         ).replace(",", "")
+                new_title = '-'.join(title.split(" "))
+                self.log(new_title.lower())
+                duplicate = duplicates(new_title.lower())
+                if duplicate == 1:
+                    # data sender function
+                    sendData(dcobj)
+                    # yield deploy
+                    deccanchroniclearray.append(dcobj.copy())
+                    addCounter(domain)
             with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
                 json.dump(deccanchroniclearray, fp)
 
@@ -95,16 +116,23 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css('div#story_container > div > div.story-list')
             for news in case2:
                 dailyoobj = {"title": news.css("div.storybox > div.storytext > h2 > a::text").extract_first(),
-                             "link": domain + news.css("div.storybox > div.storytext > h2 > a::attr(href)").extract_first(),
+                            #  "meta":[{
+                                 "link": domain + news.css("div.storybox > div.storytext > h2 > a::attr(href)").extract_first(),
+                                #  }],
                              "content": domain,
+                             "slug": news.css("div.storybox > div.storytext > h2 > a::text").extract_first(),
                              "status": "publish"
                              }
 
-                 # data sender function
-                sendData(dailyoobj)
-                # yield deploy
-                dailyoarray.append(dailyoobj.copy())
-                addCounter(domain)
+                title = (news.css(
+                    "div.storybox > div.storytext > h2 > a::text").extract_first()).replace(",", "")
+                new_title = '-'.join(title.split(" "))
+                duplicate = duplicates(new_title.lower())
+                if duplicate == 1:
+                     # data sender function
+                    sendData(dailyoobj)
+                    # yield deploy
+                    dailyoarray.append(dailyoobj.copy())
+                    addCounter(domain)
             with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
                 json.dump(dailyoarray, fp)
-            
