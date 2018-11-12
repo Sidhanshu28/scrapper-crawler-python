@@ -14,3 +14,46 @@ for
 response.css(".headinfour")
     res.css("a") text and href
 
+http://www.livemint.com/opinion = 
+for
+ response.css(".lead-stories-section-left > article")
+    res.css("a") text and href
+
+ for
+ response.css(".lead-stories-section-right > div > .lead-stories-section-right-2 > article")
+    res.css("a") text and href
+
+ response.css(".lead-stories-section-right > div > .lead-stories-section-right-1 > h1 > a") text and href
+
+http://www.ndtv.com/opinion = 
+
+for
+response.css(".nopinion")
+    res.css(".opinion_blog_contentwrap > .opinion_blog_header > a") href and text
+
+http://www.news18.com/blogs = 
+
+for
+response.css(".author-list")
+    res.css("div.item-wrap > .item-front > .item-cont > h3 > a")  text and href
+
+http://www.outlookindia.com/website = 
+
+for
+response.css(".listing > ul > li")
+    res.css(".content_search > .cont_head > a ") href and text
+
+http://www.outlookindia.com/magazine = 
+
+for
+response.css(".listing > ul > li")
+    res.css(".content_search > .cont_head > a ") href and text
+
+http://www.rediff.com/news/interviews10.html = 
+
+for
+response.css(".incolumn")
+    res = response.css(".column")
+    for res in range 2
+        r.css("div > div > p > a") href and text
+
