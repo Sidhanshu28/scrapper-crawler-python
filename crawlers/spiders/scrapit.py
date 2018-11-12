@@ -11,7 +11,6 @@ from twisted.internet.error import DNSLookupError
 from twisted.internet.error import TimeoutError, TCPTimedOutError
 from databaseConnector import sendData
 
-
 class ScrapSpider(scrapy.Spider):
     name = "scrapit"
     # request
