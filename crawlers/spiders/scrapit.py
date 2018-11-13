@@ -25,7 +25,7 @@ class ScrapSpider(scrapy.Spider):
             "http://www.deccanchronicle.com/opinion",
             # "http://www.dnaindia.com/analysis",
             # "http://www.firstpost.com/category/politics",
-            # "http://www.forbesindia.com",
+            "http://www.forbesindia.com",
             # "http://www.frontline.in",
             # "http://www.hindustantimes.com/opinion",
             # "http://indiatoday.intoday.in/calendar",
@@ -59,6 +59,7 @@ class ScrapSpider(scrapy.Spider):
     def parse(self, response):
         today = datetime.datetime.today().strftime('%Y-%m-%d')
         domain = (response.url).split('/')[2]
+        urlhead = (response.url).split('://')[0]+"://"
 
         # www.deccanchronicle.com parsing
         if (domain == 'www.deccanchronicle.com'):
@@ -68,18 +69,15 @@ class ScrapSpider(scrapy.Spider):
             res2 = case.css('div.opnionTopBig')
             for news in res:
                 dcobj = {"title": news.css("a > h3::text").extract_first(),
-                        #  "meta": [{
-                             "link": domain + news.css("a::attr(href)").extract_first(),
-                            #  }],
+                         "custom_link": urlhead + domain + news.css("a::attr(href)").extract_first(),
                          "content": domain,
                          "slug": news.css("a > h3::text").extract_first(),
                          "status": "publish"
                          }
                 title = (news.css("a > h3::text").extract_first()
                          ).replace(",", "")
-                new_title = '-'.join(title.split(" "))
-                self.log(new_title.lower())
-                duplicate = duplicates(new_title.lower())
+                duplicate = duplicates(title)
+
                 if duplicate == 1:
                     # data sender function
                     sendData(dcobj)
@@ -88,9 +86,7 @@ class ScrapSpider(scrapy.Spider):
                     addCounter(domain)
             for news in res2:
                 dcobj = {"title": news.css("a > h3::text").extract_first(),
-                        #  "meta":[{
-                             "link": domain + news.css("a::attr(href)").extract_first(),
-                            #  }],
+                         "custom_link": urlhead + domain + news.css("a::attr(href)").extract_first(),
                          "content": domain,
                          "slug": news.css("a > h3::text").extract_first(),
                          "status": "publish"
@@ -98,9 +94,7 @@ class ScrapSpider(scrapy.Spider):
 
                 title = (news.css("a > h3::text").extract_first()
                          ).replace(",", "")
-                new_title = '-'.join(title.split(" "))
-                self.log(new_title.lower())
-                duplicate = duplicates(new_title.lower())
+                duplicate = duplicates(title)
                 if duplicate == 1:
                     # data sender function
                     sendData(dcobj)
@@ -114,20 +108,15 @@ class ScrapSpider(scrapy.Spider):
         elif (domain == 'www.dailyo.in'):
             dailyoarray = []
             case2 = response.css('div#story_container > div > div.story-list')
-            for news in case2:
-                dailyoobj = {"title": news.css("div.storybox > div.storytext > h2 > a::text").extract_first(),
-                            #  "meta":[{
-                                 "link": domain + news.css("div.storybox > div.storytext > h2 > a::attr(href)").extract_first(),
-                                #  }],
+            for index, news in zip(range(5), case2):
+                dailyoobj = {"title": news.css("div.storybox > div.storytext > h2 > a::text").extract_first(),                         "custom_link": urlhead + domain + news.css("div.storybox > div.storytext > h2 > a::attr(href)") .extract_first(),
                              "content": domain,
                              "slug": news.css("div.storybox > div.storytext > h2 > a::text").extract_first(),
                              "status": "publish"
                              }
-
                 title = (news.css(
                     "div.storybox > div.storytext > h2 > a::text").extract_first()).replace(",", "")
-                new_title = '-'.join(title.split(" "))
-                duplicate = duplicates(new_title.lower())
+                duplicate = duplicates(title)
                 if duplicate == 1:
                      # data sender function
                     sendData(dailyoobj)
@@ -136,3 +125,24 @@ class ScrapSpider(scrapy.Spider):
                     addCounter(domain)
             with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
                 json.dump(dailyoarray, fp)
+        
+        # www.forbesindia.com/ parsing
+        elif (domain == 'www.forbesindia.com'):
+            forbesarray = []
+            case2 = response.css(".carousel > .carousel-inner > .item")
+            for index, news in zip(range(5), case2):
+                forbesobj = {"title": news.css(".carousel-caption > h3 > a::text").extract_first(),                                     "custom_link": urlhead + domain + news.css(".carousel-caption > h3 > a::attr(href)").extract_first(),
+                             "content": domain,
+                             "slug": news.css(".carousel-caption > h3 > a::text").extract_first(),
+                             "status": "publish"
+                             }
+                title = (news.css(".carousel-caption > h3 > a::text").extract_first()).replace(",", "")
+                duplicate = duplicates(title)
+                if duplicate == 1:
+                     # data sender function
+                    sendData(forbesobj)
+                    # yield deploy
+                    forbesarray.append(forbesobj.copy())
+                    addCounter(domain)
+            with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
+                json.dump(forbesarray, fp)
