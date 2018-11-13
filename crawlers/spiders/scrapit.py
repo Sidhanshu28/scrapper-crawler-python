@@ -26,7 +26,7 @@ class ScrapSpider(scrapy.Spider):
             # "http://www.dnaindia.com/analysis",
             # "http://www.firstpost.com/category/politics",
             "http://www.forbesindia.com",
-            # "http://www.frontline.in",
+            "http://www.frontline.in",
             # "http://www.hindustantimes.com/opinion",
             # "http://indiatoday.intoday.in/calendar",
             # "http://www.livemint.com/opinion",
@@ -81,9 +81,9 @@ class ScrapSpider(scrapy.Spider):
                 if duplicate == 1:
                     # data sender function
                     sendData(dcobj)
-                    # yield deploy
-                    deccanchroniclearray.append(dcobj.copy())
                     addCounter(domain)
+                # yield deploy
+                deccanchroniclearray.append(dcobj.copy())
             for news in res2:
                 dcobj = {"title": news.css("a > h3::text").extract_first(),
                          "custom_link": urlhead + domain + news.css("a::attr(href)").extract_first(),
@@ -98,9 +98,9 @@ class ScrapSpider(scrapy.Spider):
                 if duplicate == 1:
                     # data sender function
                     sendData(dcobj)
-                    # yield deploy
-                    deccanchroniclearray.append(dcobj.copy())
                     addCounter(domain)
+                # yield deploy
+                deccanchroniclearray.append(dcobj.copy())    
             with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
                 json.dump(deccanchroniclearray, fp)
 
@@ -120,13 +120,13 @@ class ScrapSpider(scrapy.Spider):
                 if duplicate == 1:
                      # data sender function
                     sendData(dailyoobj)
-                    # yield deploy
-                    dailyoarray.append(dailyoobj.copy())
                     addCounter(domain)
+                # yield deploy
+                dailyoarray.append(dailyoobj.copy())
             with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
                 json.dump(dailyoarray, fp)
-        
-        # www.forbesindia.com/ parsing
+
+        # www.forbesindia.com parsing
         elif (domain == 'www.forbesindia.com'):
             forbesarray = []
             case2 = response.css(".carousel > .carousel-inner > .item")
@@ -136,13 +136,36 @@ class ScrapSpider(scrapy.Spider):
                              "slug": news.css(".carousel-caption > h3 > a::text").extract_first(),
                              "status": "publish"
                              }
-                title = (news.css(".carousel-caption > h3 > a::text").extract_first()).replace(",", "")
+                title = (
+                    news.css(".carousel-caption > h3 > a::text").extract_first()).replace(",", "")
                 duplicate = duplicates(title)
                 if duplicate == 1:
                      # data sender function
                     sendData(forbesobj)
-                    # yield deploy
-                    forbesarray.append(forbesobj.copy())
                     addCounter(domain)
+                # yield deploy
+                forbesarray.append(forbesobj.copy())
             with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
                 json.dump(forbesarray, fp)
+
+        # www.frontline.in parsing
+        elif (domain == 'www.frontline.in'):
+            frontlinearray = []
+            case2 = response.css(".latestInner")
+            for index, news in zip(range(5), case2):
+                frontlineobj = {"title": news.css("h2 > a::text").extract_first(),                                     "custom_link": news.css("h2 > a::attr(href)").extract_first(),
+                             "content": domain,
+                             "slug": news.css("h2 > a::text").extract_first(),
+                             "status": "publish"
+                             }
+                title = (
+                    news.css("h2 > a::text").extract_first()).replace(",", "")
+                duplicate = duplicates(title)
+                if duplicate == 1:
+                     # data sender function
+                    sendData(frontlineobj)
+                    addCounter(domain)
+                # yield deploy
+                frontlinearray.append(frontlineobj.copy())
+            with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
+                json.dump(frontlinearray, fp)
