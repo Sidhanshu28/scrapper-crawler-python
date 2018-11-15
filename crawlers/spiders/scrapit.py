@@ -70,7 +70,6 @@ class ScrapSpider(scrapy.Spider):
             for news in res:
                 dcobj = {"title": news.css("a > h3::text").extract_first(),
                          "custom_link": urlhead + domain + news.css("a::attr(href)").extract_first(),
-                         "content": domain,
                          "slug": news.css("a > h3::text").extract_first(),
                          "status": "publish"
                          }
@@ -87,7 +86,6 @@ class ScrapSpider(scrapy.Spider):
             for news in res2:
                 dcobj = {"title": news.css("a > h3::text").extract_first(),
                          "custom_link": urlhead + domain + news.css("a::attr(href)").extract_first(),
-                         "content": domain,
                          "slug": news.css("a > h3::text").extract_first(),
                          "status": "publish"
                          }
@@ -100,7 +98,7 @@ class ScrapSpider(scrapy.Spider):
                     sendData(dcobj)
                     addCounter(domain)
                 # yield deploy
-                deccanchroniclearray.append(dcobj.copy())    
+                deccanchroniclearray.append(dcobj.copy())
             with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
                 json.dump(deccanchroniclearray, fp)
 
@@ -109,8 +107,7 @@ class ScrapSpider(scrapy.Spider):
             dailyoarray = []
             case2 = response.css('div#story_container > div > div.story-list')
             for index, news in zip(range(5), case2):
-                dailyoobj = {"title": news.css("div.storybox > div.storytext > h2 > a::text").extract_first(),                         "custom_link": urlhead + domain + news.css("div.storybox > div.storytext > h2 > a::attr(href)") .extract_first(),
-                             "content": domain,
+                dailyoobj = {"title": news.css("div.storybox > div.storytext > h2 > a::text").extract_first(),                                  "custom_link": urlhead + domain + news.css("div.storybox > div.storytext > h2 > a::attr(href)") .extract_first(),
                              "slug": news.css("div.storybox > div.storytext > h2 > a::text").extract_first(),
                              "status": "publish"
                              }
@@ -131,8 +128,7 @@ class ScrapSpider(scrapy.Spider):
             forbesarray = []
             case2 = response.css(".carousel > .carousel-inner > .item")
             for index, news in zip(range(5), case2):
-                forbesobj = {"title": news.css(".carousel-caption > h3 > a::text").extract_first(),                                     "custom_link": urlhead + domain + news.css(".carousel-caption > h3 > a::attr(href)").extract_first(),
-                             "content": domain,
+                forbesobj = {"title": news.css(".carousel-caption > h3 > a::text").extract_first(),                                             "custom_link": urlhead + domain + news.css(".carousel-caption > h3 > a::attr(href)").extract_first(),
                              "slug": news.css(".carousel-caption > h3 > a::text").extract_first(),
                              "status": "publish"
                              }
@@ -153,11 +149,10 @@ class ScrapSpider(scrapy.Spider):
             frontlinearray = []
             case2 = response.css(".latestInner")
             for index, news in zip(range(5), case2):
-                frontlineobj = {"title": news.css("h2 > a::text").extract_first(),                                     "custom_link": news.css("h2 > a::attr(href)").extract_first(),
-                             "content": domain,
-                             "slug": news.css("h2 > a::text").extract_first(),
-                             "status": "publish"
-                             }
+                frontlineobj = {"title": news.css("h2 > a::text").extract_first(),                                                                 "custom_link": news.css("h2 > a::attr(href)").extract_first(),
+                                "slug": news.css("h2 > a::text").extract_first(),
+                                "status": "publish"
+                                }
                 title = (
                     news.css("h2 > a::text").extract_first()).replace(",", "")
                 duplicate = duplicates(title)
