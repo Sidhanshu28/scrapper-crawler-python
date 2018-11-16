@@ -9,51 +9,139 @@ for
 response.css(".latestupdate > swiper-wrapper > .latestInner")
     res.css(h2 > a) (text and href)
 
-http://www.hindustantimes.com/opinion/ = 
+http://www.hindustantimes.com/opinion/ = DONE
 for
-response.css(".headinfour")
+response.css(".headingfour")
     res.css("a") text and href
 
-http://www.livemint.com/opinion = 
-for
- response.css(".lead-stories-section-left > article")
-    res.css("a") text and href
 
- for
- response.css(".lead-stories-section-right > div > .lead-stories-section-right-2 > article")
-    res.css("a") text and href
-
- response.css(".lead-stories-section-right > div > .lead-stories-section-right-1 > h1 > a") text and href
-
-http://www.ndtv.com/opinion = 
+http://www.ndtv.com/opinion = DONE
 
 for
 response.css(".nopinion")
     res.css(".opinion_blog_contentwrap > .opinion_blog_header > a") href and text
 
-http://www.news18.com/blogs = 
+http://www.news18.com/blogs = DONE
 
 for
 response.css(".author-list")
     res.css("div.item-wrap > .item-front > .item-cont > h3 > a")  text and href
 
-http://www.outlookindia.com/website = 
+http://www.outlookindia.com/website = DONE
 
 for
 response.css(".listing > ul > li")
     res.css(".content_search > .cont_head > a ") href and text
 
-http://www.outlookindia.com/magazine = 
+http://www.outlookindia.com/magazine = DONE
 
 for
 response.css(".listing > ul > li")
     res.css(".content_search > .cont_head > a ") href and text
 
-http://www.rediff.com/news/interviews10.html = 
+
+http://scroll.in/ = DONE
+
+response.css(".featured-story > a") href
+response.css(".featured-story > a >.row-story > h1 ") text
 
 for
-response.css(".incolumn")
-    res = response.css(".column")
-    for res in range 2
-        r.css("div > div > p > a") href and text
+response.css(".basic-collection-stories > ul > li")
+    res.css("a") href
+    res.css("a > div.raw-story-meta > h1") text
 
+https://blogs.economictimes.indiatimes.com/ = DONE
+
+for
+response.css(".article")
+    res.css(".media-body > .media-heading > a") text and href
+
+http://www.financialexpress.com/print/edits-columns/ = DONE
+
+response.css(".listtopbox > .pstsummary > .lsttitle > a") text and href
+
+for
+response.css(".lstitemt")
+    res.css(".listcontent > .lstitems > a") text and href
+
+https://www.thehindu.com/opinion/ = DONE
+
+for
+response.css(".ES2-100x4-text1 > h2") text
+response.css(".ES2-100x4-text1 > h2 > ") href
+
+http://www.thehindubusinessline.com/opinion/ = DONE
+
+for
+response.css("h2.op-title") 
+    res.css("a") href and text
+
+response.css("h2.ed-ts > a") href and text
+
+http://www.dnaindia.com/analysis = Done
+
+response.css(".opiniontpbx > h3 > a") text and href
+
+for
+response.css(".opinionsubldbx")
+    res.css("h3 > a") text and href
+
+http://www.firstpost.com/category/politics = DONE 
+
+response.css(".news-item > a") href
+response.css(".news-item > a > "h1) text
+
+for
+response.css(".panel-body > ul.single-column > li")
+    res.css("a") href
+    res.css("a > p") text
+
+https://www.telegraphindia.com/opinion = DONE
+
+response.css(".storyDetailsLeft > h3 > a") href and text
+
+for
+response.css(".storyDetailsRight")
+    res.css("h3 > a") text and href
+
+https://thewire.in/category/politics/all = DONE
+
+for
+response.css(".card-title")
+    res.css("a") text and href
+
+http://www.tribuneindia.com/news/opinion/ = DONE
+
+for
+response.css(".OpLeft > h2")
+    res.css("a") href and text
+
+http://blogs.timesofindia.indiatimes.com/ = DONE
+
+for
+response.css(".article")
+    res.css(".media-body > .media-heading > a") text and href
+
+http://www.dailypioneer.com/columnists = DONE
+
+response.css(".BigNews > h2 > a") href and text
+
+http://www.newindianexpress.com/Opinions =
+
+for
+response.css(".sub_opinion_main") 
+    res.css("h5 > a") text and href
+
+http://qrius.com/ = 
+
+for
+response.css(".post-infobox")
+    res.css("p > a") href and text
+
+http://indianexpress.com/opinion/ = 
+
+response.css(".leadstory > h6 > a") href and text
+
+for range 6
+response.css(".opi-story")
+    res.css("h6 > a") text and href
