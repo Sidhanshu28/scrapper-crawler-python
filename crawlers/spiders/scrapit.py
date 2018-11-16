@@ -21,33 +21,28 @@ class ScrapSpider(scrapy.Spider):
     def start_requests(self):
         todayFolder(self)
         urls = [
-            # "http://www.dailyo.in/politics",
-            # "http://www.deccanchronicle.com/opinion",
-            # "http://www.dnaindia.com/analysis",
-            # "http://www.firstpost.com/category/politics",
-            # "http://www.forbesindia.com",
-            # "http://www.frontline.in",
-            # "http://www.hindustantimes.com/opinion/",  ------not woorking noneType
-            # "http://www.ndtv.com/opinion",
-            # "http://www.news18.com/blogs",
-            # "http://www.outlookindia.com/website", ------not woorking noneType
-            # "http://www.outlookindia.com/magazine", ------not woorking noneType
-            # # "http://www.rediff.com/news/interviews10.html",
-            # # "http://www.rediff.com/news/columns10.html",
+            "http://www.dailyo.in/politics",
+            "http://www.deccanchronicle.com/opinion",
+            "http://www.firstpost.com/category/politics",
+            "http://www.forbesindia.com",
+            "http://www.frontline.in",
+            "http://www.hindustantimes.com/opinion/",
+            "http://www.ndtv.com/opinion",
+            "http://www.news18.com/blogs",
+            "https://www.outlookindia.com/website",
+            "https://www.outlookindia.com/magazine",
             "http://scroll.in",
-            # "https://blogs.economictimes.indiatimes.com",
-            # "http://www.financialexpress.com/print/edits-columns",
-            # # "http://www.thehindu.com/opinion",
-            # "https://www.thehindubusinessline.com/opinion",
-            # # "http://www.huffingtonpost.in/the-blog",
-            # # "http://theindianeconomist.com",
-            # "http://indianexpress.com/opinion",
-            # "http://www.newindianexpress.com/Opinions",
-            # "http://www.dailypioneer.com/columnists",
-            # "http://blogs.timesofindia.indiatimes.com",
-            # "http://www.tribuneindia.com/news/opinion",
-            # "http://thewire.in",
-            # "https://www.telegraphindia.com/opinion",
+            "https://blogs.economictimes.indiatimes.com",
+            "https://www.thehindu.com/opinion/", 
+            "https://www.thehindubusinessline.com/opinion/",
+            "http://qrius.com", 
+            "http://www.indianexpress.com/opinion", 
+            "http://www.newindianexpress.com/Opinions",
+            "http://www.dailypioneer.com/columnists",
+            "http://blogs.timesofindia.indiatimes.com",
+            "https://www.tribuneindia.com/news/opinion/",
+            "https://thewire.in",
+            "https://www.telegraphindia.com/opinion",
         ]
         for url in urls:
             request = scrapy.Request(
@@ -58,7 +53,7 @@ class ScrapSpider(scrapy.Spider):
         today = datetime.datetime.today().strftime('%Y-%m-%d')
         domain = (response.url).split('/')[2]
         urlhead = (response.url).split('://')[0]+"://"
-        self.log(domain)
+        self.log(response.url)
         # www.deccanchronicle.com parsing
         if (domain == 'www.deccanchronicle.com'):
             deccanchroniclearray = []
@@ -167,7 +162,7 @@ class ScrapSpider(scrapy.Spider):
         # www.hindustantimes.com/opinion parsing
         elif (domain == 'www.hindustantimes.com'):
             htarray = []
-            case2 = response.css(".headingfour")
+            case2 = response.css(".media-heading")
             for index, news in zip(range(3), case2):
                 htobj = {"title": news.css("a::text").extract_first(),                                                                 "custom_link": news.css("a::attr(href)").extract_first(),
                          "slug": news.css("a::text").extract_first(),
@@ -231,13 +226,14 @@ class ScrapSpider(scrapy.Spider):
         elif (domain == 'www.outlookindia.com'):
             oliarray = []
             case2 = response.css(".listing > ul > li")
-            for index, news in zip(range(5), case2):
-                oliobj = {"title": news.css(".content_search > .cont_head > a::text").extract_first(),            "custom_link": news.css(".content_search > .cont_head > a::attr(href)").extract_first(),
-                          "slug": news.css(".content_search > .cont_head > a::text").extract_first(),
+            for index, news in zip(range(2), case2):
+                oliobj = {"title": news.css(".content_serach > .cont_head > a::text").extract_first(),            
+                "custom_link": response.url + news.css(".content_serach > .cont_head > a::attr(href)").extract_first(),
+                          "slug": news.css(".content_serach > .cont_head > a::text").extract_first(),
                           "status": "publish"
                           }
                 title = (
-                    news.css(".content_search > .cont_head > a::text").extract_first()).replace(",", "")
+                    news.css(".content_serach > .cont_head > a::text").extract_first()).replace(",", "")
                 duplicate = duplicates(title)
                 if duplicate == 1:
                      # data sender function
@@ -246,41 +242,20 @@ class ScrapSpider(scrapy.Spider):
                 # yield deploy
                 oliarray.append(oliobj.copy())
             with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
-                json.dump(oliarray, fp)
-
-        # www.outlookindia.com/magazine parsing
-        elif (domain == 'www.outlookindia.com'):
-            oliarray = []
-            case2 = response.css(".listing > ul > li")
-            for index, news in zip(range(5), case2):
-                oliobj = {"title": news.css(".content_search > .cont_head > a::text").extract_first(),            "custom_link": news.css(".content_search > .cont_head > a::attr(href)").extract_first(),
-                          "slug": news.css(".content_search > .cont_head > a::text").extract_first(),
-                          "status": "publish"
-                          }
-                title = (
-                    news.css(".content_search > .cont_head > a::text").extract_first()).replace(",", "")
-                duplicate = duplicates(title)
-                if duplicate == 1:
-                     # data sender function
-                    sendData(oliobj)
-                    addCounter(domain)
-                # yield deploy
-                oliarray.append(oliobj.copy())
-            with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
-                json.dump(oliarray, fp)
+                json.dump(oliarray, fp) 
 
         # scroll.in parsing
         elif (domain == 'scroll.in'):
             newarray = []
             # case2 = response.css(".listing > ul > li")
             # for index, news in zip(range(5), case2):
-            newobj = {"title": news.css(".featured-story > a >.row-story > h1::text").extract_first(),
-                      "custom_link": news.css(".featured-story > a::attr(href)").extract_first(),
-                      "slug": news.css(".featured-story > a >.row-story > h1::text").extract_first(),
+            newobj = {"title": response.css(".featured-story > a >.row-story > h1::text").extract_first(),
+                      "custom_link": response.css(".featured-story > a::attr(href)").extract_first(),
+                      "slug": response.css(".featured-story > a >.row-story > h1::text").extract_first(),
                       "status": "publish"
                       }
             title = (
-                news.css(".featured-story > a >.row-story > h1::text").extract_first()).replace(",", "")
+                response.css(".featured-story > a >.row-story > h1::text").extract_first()).replace(",", "")
             duplicate = duplicates(title)
             if duplicate == 1:
                     # data sender function
@@ -310,7 +285,7 @@ class ScrapSpider(scrapy.Spider):
                 json.dump(newarray, fp)
 
         # blogs.economictimes.indiatimes.com parsing
-        elif (domain == 'blogs.economictimes.indiatimes.com'):
+        elif (domain == 'economictimes.indiatimes.com'):
             newarray = []
             case2 = response.css(".article")
             for index, news in zip(range(5), case2):
@@ -331,16 +306,16 @@ class ScrapSpider(scrapy.Spider):
                 json.dump(newarray, fp)
 
         # www.financialexpress.com/print/edits-columns parsing
-        elif (domain == 'www.financialexpress.com/print/edits-columns'):
+        elif (domain == 'www.financialexpress.com'):
             newarray = []
             # case2 = response.css(".article")
             # for index, news in zip(range(5), case2):
-            newobj = {"title": news.css(".listtopbox > .pstsummary > .lsttitle > a::text").extract_first(),                              "custom_link": news.css(".listtopbox > .pstsummary > .lsttitle > a::attr(href)").extract_first(),
-                        "slug": news.css(".listtopbox > .pstsummary > .lsttitle > a::text").extract_first(),
+            newobj = {"title": response.css(".listtopbox > .pstsummary > .lsttitle > a::text").extract_first(),                              "custom_link": response.css(".listtopbox > .pstsummary > .lsttitle > a::attr(href)").extract_first(),
+                        "slug": response.css(".listtopbox > .pstsummary > .lsttitle > a::text").extract_first(),
                         "status": "publish"
                         }
             title = (
-                news.css(".listtopbox > .pstsummary > .lsttitle > a::text").extract_first()).replace(",", "")
+                response.css(".listtopbox > .pstsummary > .lsttitle > a::text").extract_first()).replace(",", "")
             duplicate = duplicates(title)
             if duplicate == 1:
                     # data sender function
@@ -370,7 +345,7 @@ class ScrapSpider(scrapy.Spider):
                 json.dump(newarray, fp)
 
         # www.thehindu.com/opinion parsing
-        elif (domain == 'www.thehindu.com/opinion'):
+        elif (domain == 'www.thehindu.com'):
             newarray = []
             case2 = response.css(".ES2-100x4-text1")
             for index, news in zip(range(5), case2):
@@ -392,7 +367,7 @@ class ScrapSpider(scrapy.Spider):
                 json.dump(newarray, fp)
 
         # www.thehindubusinessline.com/opinion parsing
-        elif (domain == 'www.thehindubusinessline.com/opinion'):
+        elif (domain == 'www.thehindubusinessline.com'):
             newarray = []
             case2 = response.css("h2.op-title")
             for index, news in zip(range(5), case2):
@@ -414,7 +389,7 @@ class ScrapSpider(scrapy.Spider):
                 json.dump(newarray, fp)
 
         # www.thehindubusinessline.com/opinion parsing
-        elif (domain == 'www.thehindubusinessline.com/opinion'):
+        elif (domain == 'www.thehindubusinessline.com'):
             newarray = []
             case2 = response.css("h2.op-title")
             for index, news in zip(range(3), case2):
@@ -433,12 +408,12 @@ class ScrapSpider(scrapy.Spider):
                 # yield deploy
                 newarray.append(newobj.copy())
 
-            newobj = {"title": news.css("h2.ed-ts > a::text").extract_first(),
-                        "custom_link": news.css("h2.ed-ts > a::attr(href)").extract_first(),
-                          "slug": news.css("h2.ed-ts > a::text").extract_first(),
+            newobj = {"title": response.css("h2.ed-ts > a::text").extract_first(),
+                        "custom_link": response.css("h2.ed-ts > a::attr(href)").extract_first(),
+                          "slug": response.css("h2.ed-ts > a::text").extract_first(),
                           "status": "publish"
                           }
-            title = (news.css("h2.ed-ts > a::text").extract_first()).replace(",", "")
+            title = (response.css("h2.ed-ts > a::text").extract_first()).replace(",", "")
             duplicate = duplicates(title)
             if duplicate == 1:
                 # data sender function
@@ -450,7 +425,7 @@ class ScrapSpider(scrapy.Spider):
                 json.dump(newarray, fp)
 
         # www.dnaindia.com/analysis parsing
-        elif (domain == 'www.dnaindia.com/analysis'):
+        elif (domain == 'www.dnaindia.com'):
             newarray = []
             case2 = response.css(".opinionsubldbx")
             for index, news in zip(range(3), case2):
@@ -469,12 +444,12 @@ class ScrapSpider(scrapy.Spider):
                 # yield deploy
                 newarray.append(newobj.copy())
 
-            newobj = {"title": news.css(".opiniontpbx > h3 > a::text").extract_first(),
-                        "custom_link": news.css(".opiniontpbx > h3 > a::attr(href)").extract_first(),
-                          "slug": news.css(".opiniontpbx > h3 > a::text").extract_first(),
+            newobj = {"title": response.css(".opiniontpbx > h3 > a::text").extract_first(),
+                        "custom_link": response.css(".opiniontpbx > h3 > a::attr(href)").extract_first(),
+                          "slug": response.css(".opiniontpbx > h3 > a::text").extract_first(),
                           "status": "publish"
                           }
-            title = (news.css(".opiniontpbx > h3 > a::text").extract_first()).replace(",", "")
+            title = (response.css(".opiniontpbx > h3 > a::text").extract_first()).replace(",", "")
             duplicate = duplicates(title)
             if duplicate == 1:
                 # data sender function
@@ -486,7 +461,7 @@ class ScrapSpider(scrapy.Spider):
                 json.dump(newarray, fp)
 
         # www.firstpost.com/category/politics parsing
-        elif (domain == 'www.firstpost.com/category/politics'):
+        elif (domain == 'www.firstpost.com'):
             newarray = []
             case2 = response.css(".panel-body > ul.single-column > li")
             for index, news in zip(range(3), case2):
@@ -505,12 +480,12 @@ class ScrapSpider(scrapy.Spider):
                 # yield deploy
                 newarray.append(newobj.copy())
 
-            newobj = {"title": news.css(".news-item > a > h1::text").extract_first(),
-                        "custom_link": news.css(".news-item > a::attr(href)").extract_first(),
-                          "slug": news.css(".news-item > a > h1::text").extract_first(),
+            newobj = {"title": response.css(".news-item > a > h1::text").extract_first(),
+                        "custom_link": response.css(".news-item > a::attr(href)").extract_first(),
+                          "slug": response.css(".news-item > a > h1::text").extract_first(),
                           "status": "publish"
                           }
-            title = (news.css(".news-item > a > h1::text").extract_first()).replace(",", "")
+            title = (response.css(".news-item > a > h1::text").extract_first()).replace(",", "")
             duplicate = duplicates(title)
             if duplicate == 1:
                 # data sender function
@@ -522,7 +497,7 @@ class ScrapSpider(scrapy.Spider):
                 json.dump(newarray, fp)
 
         # www.telegraphindia.com/opinion parsing
-        elif (domain == 'www.telegraphindia.com/opinion'):
+        elif (domain == 'www.telegraphindia.com'):
             newarray = []
             case2 = response.css(".storyDetailsRight")
             for index, news in zip(range(3), case2):
@@ -541,12 +516,12 @@ class ScrapSpider(scrapy.Spider):
                 # yield deploy
                 newarray.append(newobj.copy())
 
-            newobj = {"title": news.css(".storyDetailsLeft > h3 > a::text").extract_first(),
-                        "custom_link": news.css(".storyDetailsLeft > h3 > a::attr(href)").extract_first(),
-                          "slug": news.css(".storyDetailsLeft > h3 > a::text").extract_first(),
+            newobj = {"title": response.css(".storyDetailsLeft > h3 > a::text").extract_first(),
+                        "custom_link": response.css(".storyDetailsLeft > h3 > a::attr(href)").extract_first(),
+                          "slug": response.css(".storyDetailsLeft > h3 > a::text").extract_first(),
                           "status": "publish"
                           }
-            title = (news.css(".storyDetailsLeft > h3 > a::text").extract_first()).replace(",", "")
+            title = (response.css(".storyDetailsLeft > h3 > a::text").extract_first()).replace(",", "")
             duplicate = duplicates(title)
             if duplicate == 1:
                 # data sender function
@@ -558,10 +533,10 @@ class ScrapSpider(scrapy.Spider):
                 json.dump(newarray, fp)
 
         # thewire.in/category/politics/all parsing
-        elif (domain == 'thewire.in/category/politics/all'):
+        elif (domain == 'thewire.in'):
             newarray = []
-            case2 = response.css(".card-title")
-            for index, news in zip(range(5), case2):
+            case2 = response.css(".card__title")
+            for index, news in zip(range(3), case2):
                 newobj = {"title": news.css("a::text").extract_first(),
                         "custom_link": news.css("a::attr(href)").extract_first(),
                           "slug": news.css("a::text").extract_first(),
@@ -580,7 +555,7 @@ class ScrapSpider(scrapy.Spider):
                 json.dump(newarray, fp)
 
         # www.tribuneindia.com/news/opinion parsing
-        elif (domain == 'www.tribuneindia.com/news/opinion'):
+        elif (domain == 'www.tribuneindia.com'):
             newarray = []
             case2 = response.css(".OpLeft > h2")
             for index, news in zip(range(5), case2):
@@ -602,7 +577,7 @@ class ScrapSpider(scrapy.Spider):
                 json.dump(newarray, fp)
 
         # blogs.timesofindia.indiatimes.com parsing
-        elif (domain == 'blogs.timesofindia.indiatimes.com'):
+        elif (domain == 'timesofindia.indiatimes.com'):
             newarray = []
             case2 = response.css(".article")
             for index, news in zip(range(5), case2):
@@ -624,17 +599,17 @@ class ScrapSpider(scrapy.Spider):
                 json.dump(newarray, fp)
 
         # www.dailypioneer.com/columnists parsing
-        elif (domain == 'www.dailypioneer.com/columnists'):
+        elif (domain == 'www.dailypioneer.com'):
             newarray = []
             # case2 = response.css(".article")
             # for index, news in zip(range(5), case2):
-            newobj = {"title": news.css(".BigNews > h2 > a::text").extract_first(),
-                      "custom_link": news.css(".BigNews > h2 > a::attr(href)").extract_first(),
-                        "slug": news.css(".BigNews > h2 > a::text").extract_first(),
+            newobj = {"title": response.css(".BigNews > h2 > a::text").extract_first(),
+                      "custom_link": "https://" + domain + "/columnists" + response.css(".BigNews > h2 > a::attr(href)").extract_first(),
+                        "slug": response.css(".BigNews > h2 > a::text").extract_first(),
                         "status": "publish"
                         }
             title = (
-                   news.css(".BigNews > h2 > a::text").extract_first()).replace(",", "")
+                   response.css(".BigNews > h2 > a::text").extract_first()).replace(",", "")
             duplicate = duplicates(title)
             if duplicate == 1:
                 # data sender function
@@ -646,10 +621,10 @@ class ScrapSpider(scrapy.Spider):
                 json.dump(newarray, fp)
 
         # www.newindianexpress.com/Opinions parsing
-        elif (domain == 'www.newindianexpress.com/Opinions'):
+        elif (domain == 'www.newindianexpress.com'):
             newarray = []
             case2 = response.css(".sub_opinion_main")
-            for index, news in zip(range(5), case2):
+            for index, news in zip(range(3), case2):
                 newobj = {"title": news.css("h5 > a::text").extract_first(),
                         "custom_link": news.css("h5 > a::attr(href)").extract_first(),
                           "slug": news.css("h5 > a::text").extract_first(),
@@ -670,15 +645,15 @@ class ScrapSpider(scrapy.Spider):
         # qrius.com parsing
         elif (domain == 'qrius.com'):
             newarray = []
-            case2 = response.css(".post-infobox")
-            for index, news in zip(range(5), case2):
-                newobj = {"title": news.css("p > a::text").extract_first(),
-                        "custom_link": news.css("p > a::attr(href)").extract_first(),
-                          "slug": news.css("p > a::text").extract_first(),
+            case2 = response.css(".imgpost")
+            for index, news in zip(range(3), case2):
+                newobj = {"title": news.css(".textbox > p > a::text").extract_first(),
+                        "custom_link": news.css(".textbox > p > a::attr(href)").extract_first(),
+                          "slug": news.css(".textbox > p > a::text").extract_first(),
                           "status": "publish"
                           }
                 title = (
-                    news.css("p > a::text").extract_first()).replace(",", "")
+                    news.css(".textbox > p > a::text").extract_first()).replace(",", "")
                 duplicate = duplicates(title)
                 if duplicate == 1:
                      # data sender function
@@ -690,7 +665,7 @@ class ScrapSpider(scrapy.Spider):
                 json.dump(newarray, fp)
 
         # indianexpress.com/opinion parsing
-        elif (domain == 'indianexpress.com/opinion'):
+        elif (domain == 'indianexpress.com'):
             newarray = []
             case2 = response.css(".opi-story")
             for index, news in zip(range(3), case2):
@@ -709,12 +684,12 @@ class ScrapSpider(scrapy.Spider):
                 # yield deploy
                 newarray.append(newobj.copy())
 
-            newobj = {"title": news.css(".leadstory > h6 > a::text").extract_first(),
-                        "custom_link": news.css(".leadstory > h6 > a::attr(href)").extract_first(),
-                          "slug": news.css(".leadstory > h6 > a::text").extract_first(),
+            newobj = {"title": response.css(".leadstory > h6 > a::text").extract_first(),
+                        "custom_link": response.css(".leadstory > h6 > a::attr(href)").extract_first(),
+                          "slug": response.css(".leadstory > h6 > a::text").extract_first(),
                           "status": "publish"
                           }
-            title = (news.css(".leadstory > h6 > a::text").extract_first()).replace(",", "")
+            title = (response.css(".leadstory > h6 > a::text").extract_first()).replace(",", "")
             duplicate = duplicates(title)
             if duplicate == 1:
                 # data sender function
