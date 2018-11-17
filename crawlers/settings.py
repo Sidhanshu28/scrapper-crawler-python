@@ -13,7 +13,7 @@ BOT_NAME = 'crawlers'
 
 SPIDER_MODULES = ['crawlers.spiders']
 NEWSPIDER_MODULE = 'crawlers.spiders'
-
+user_agent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1"
 #Export as CSV Feed
 FEED_FORMAT = "csv"
 FEED_URI = "news.csv"

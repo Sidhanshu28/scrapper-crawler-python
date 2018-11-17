@@ -21,32 +21,39 @@ class ScrapSpider(scrapy.Spider):
     def start_requests(self):
         todayFolder(self)
         urls = [
-            "http://www.dailyo.in/politics",
-            "http://www.deccanchronicle.com/opinion",
-            "http://www.firstpost.com/category/politics",
-            "http://www.forbesindia.com",
-            "http://www.frontline.in",
-            "http://www.hindustantimes.com/opinion/",
-            "http://www.ndtv.com/opinion",
-            "http://www.news18.com/blogs",
-            "https://www.outlookindia.com/website",
-            "https://www.outlookindia.com/magazine",
-            "http://scroll.in",
-            "https://blogs.economictimes.indiatimes.com",
-            "https://www.thehindu.com/opinion/", 
-            "https://www.thehindubusinessline.com/opinion/",
-            "http://qrius.com", 
-            "http://www.indianexpress.com/opinion", 
-            "http://www.newindianexpress.com/Opinions",
-            "http://www.dailypioneer.com/columnists",
-            "http://blogs.timesofindia.indiatimes.com",
-            "https://www.tribuneindia.com/news/opinion/",
-            "https://thewire.in",
-            "https://www.telegraphindia.com/opinion",
+            # "http://www.dailyo.in/politics",
+            # "http://www.deccanchronicle.com/opinion",
+            # "http://www.firstpost.com/category/politics",
+            # "http://www.forbesindia.com",
+            # "http://www.frontline.in",
+            # "http://www.hindustantimes.com/opinion/",
+            # "http://www.ndtv.com/opinion",
+            # "http://www.news18.com/blogs",
+            # "https://www.outlookindia.com/website",
+            # "https://www.outlookindia.com/magazine",
+            # "http://scroll.in",
+            # "https://blogs.economictimes.indiatimes.com",
+            # "https://www.thehindu.com/opinion/", 
+            # "https://www.thehindubusinessline.com/opinion/",
+            # "http://qrius.com", 
+            # "http://www.indianexpress.com/opinion", 
+            # "http://www.newindianexpress.com/Opinions",
+            # "http://www.dailypioneer.com/columnists",
+            # "http://blogs.timesofindia.indiatimes.com",
+            # "https://www.tribuneindia.com/news/opinion/",
+            # "https://thewire.in",
+            # "https://www.telegraphindia.com/opinion",
+            # "http://www.rediff.com/news/interviews10.html",
+            # "http://www.rediff.com/news/columns10.html",
+            # "https://www.huffingtonpost.in/blogs",
+            # "https://www.dnaindia.com/analysis",
+            # "http://www.livemint.com/opinion/",
+            "http://www.financialexpress.com/print/edits-columns"
         ]
+        headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0'}
         for url in urls:
             request = scrapy.Request(
-                url=url, callback=self.parse, errback=errback_httpbin)
+                url=url, callback=self.parse, headers=headers,errback=errback_httpbin)
             yield request
 
     def parse(self, response):
@@ -228,7 +235,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".listing > ul > li")
             for index, news in zip(range(2), case2):
                 oliobj = {"title": news.css(".content_serach > .cont_head > a::text").extract_first(),            
-                "custom_link": response.url + news.css(".content_serach > .cont_head > a::attr(href)").extract_first(),
+                "custom_link": "http://"+ domain + news.css(".content_serach > .cont_head > a::attr(href)").extract_first(),
                           "slug": news.css(".content_serach > .cont_head > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -430,7 +437,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".opinionsubldbx")
             for index, news in zip(range(3), case2):
                 newobj = {"title": news.css("h3 > a::text").extract_first(),
-                        "custom_link": news.css("h3 > a::attr(href)").extract_first(),
+                        "custom_link": "https://" + domain + news.css("h3 > a::attr(href)").extract_first(),
                           "slug": news.css("h3 > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -445,7 +452,7 @@ class ScrapSpider(scrapy.Spider):
                 newarray.append(newobj.copy())
 
             newobj = {"title": response.css(".opiniontpbx > h3 > a::text").extract_first(),
-                        "custom_link": response.css(".opiniontpbx > h3 > a::attr(href)").extract_first(),
+                        "custom_link": "https://" + domain + response.css(".opiniontpbx > h3 > a::attr(href)").extract_first(),
                           "slug": response.css(".opiniontpbx > h3 > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -502,7 +509,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".storyDetailsRight")
             for index, news in zip(range(3), case2):
                 newobj = {"title": news.css("h3 > a::text").extract_first(),
-                        "custom_link": news.css("h3 > a::attr(href)").extract_first(),
+                        "custom_link": "https://"+ domain + news.css("h3 > a::attr(href)").extract_first(),
                           "slug": news.css("h3 > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -517,7 +524,7 @@ class ScrapSpider(scrapy.Spider):
                 newarray.append(newobj.copy())
 
             newobj = {"title": response.css(".storyDetailsLeft > h3 > a::text").extract_first(),
-                        "custom_link": response.css(".storyDetailsLeft > h3 > a::attr(href)").extract_first(),
+                        "custom_link": "https://"+ domain + response.css(".storyDetailsLeft > h3 > a::attr(href)").extract_first(),
                           "slug": response.css(".storyDetailsLeft > h3 > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -538,7 +545,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".card__title")
             for index, news in zip(range(3), case2):
                 newobj = {"title": news.css("a::text").extract_first(),
-                        "custom_link": news.css("a::attr(href)").extract_first(),
+                        "custom_link": "https://"+ domain + news.css("a::attr(href)").extract_first(),
                           "slug": news.css("a::text").extract_first(),
                           "status": "publish"
                           }
@@ -554,13 +561,13 @@ class ScrapSpider(scrapy.Spider):
             with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
                 json.dump(newarray, fp)
 
-        # www.tribuneindia.com/news/opinion parsing
+        # www.tribuneindia.com/news/opinion/ parsing
         elif (domain == 'www.tribuneindia.com'):
             newarray = []
             case2 = response.css(".OpLeft > h2")
             for index, news in zip(range(5), case2):
                 newobj = {"title": news.css("a::text").extract_first(),
-                        "custom_link": news.css("a::attr(href)").extract_first(),
+                        "custom_link": "https://" + domain + news.css("a::attr(href)").extract_first(),
                           "slug": news.css("a::text").extract_first(),
                           "status": "publish"
                           }
@@ -690,6 +697,105 @@ class ScrapSpider(scrapy.Spider):
                           "status": "publish"
                           }
             title = (response.css(".leadstory > h6 > a::text").extract_first()).replace(",", "")
+            duplicate = duplicates(title)
+            if duplicate == 1:
+                # data sender function
+                sendData(newobj)
+                addCounter(domain)
+            # yield deploy
+            newarray.append(newobj.copy())
+            with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
+                json.dump(newarray, fp)
+
+        # http://www.rediff.com/news/interviews10.html parsing
+        elif (domain == 'www.rediff.com'):
+            newarray = []
+            case2 = response.css(".column")
+            for index, news in zip(range(3), case2):
+                newobj = {"title": news.css(".outborder > .ingap > p > a::text").extract_first(),
+                        "custom_link": news.css(".outborder > .ingap > p > a::attr(href)").extract_first(),
+                          "slug": news.css(".outborder > .ingap > p > a::text").extract_first(),
+                          "status": "publish"
+                          }
+                title = (
+                    news.css(".outborder > .ingap > p > a::text").extract_first()).replace(",", "")
+                duplicate = duplicates(title)
+                if duplicate == 1:
+                     # data sender function
+                    sendData(newobj)
+                    addCounter(domain)
+                # yield deploy
+                newarray.append(newobj.copy())
+            with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
+                json.dump(newarray, fp)
+
+        # https://www.huffingtonpost.in/blogs/ parsing draft posts
+        elif (domain == 'www.huffingtonpost.in'):
+            newarray = []
+            # self.log(response)
+            case2 = response.css("ul.card__headlines > li.card__entry > h3.card__headline")
+            for index,news in zip(range(30),case2):
+                self.log(news.css("a::text").extract_first())
+                newobj = {"title": news.css("a::text").extract_first(),
+                        "custom_link": news.css("a::attr(href)").extract_first(),
+                          "slug": news.css("a::text").extract_first(),
+                          "status": "draft"
+                          }
+                title = (
+                    news.css("a::text").extract_first()).replace(",", "")
+                duplicate = duplicates(title)
+                if duplicate == 1:
+                     # data sender function
+                    sendData(newobj)
+                    addCounter(domain)
+                # yield deploy
+                newarray.append(newobj.copy())
+            with open('./jsons/%s/%s.json' % (today, domain), 'w') as fp:
+                json.dump(newarray, fp)
+
+        # http://www.livemint.com/opinion parsing
+        elif (domain == 'www.livemint.com'):
+            newarray = []
+            case2 = response.css(".lead-stories-section-left > article")
+            for index, news in zip(range(3), case2):
+                newobj = {"title": news.css("a::text").extract_first(),
+                        "custom_link": "http://" + domain + news.css("a::attr(href)").extract_first(),
+                          "slug": news.css("a::text").extract_first(),
+                          "status": "publish"
+                          }
+                title = (
+                    news.css("a::text").extract_first()).replace(",", "")
+                duplicate = duplicates(title)
+                if duplicate == 1:
+                     # data sender function
+                    sendData(newobj)
+                    addCounter(domain)
+                # yield deploy
+                newarray.append(newobj.copy())
+
+            case3 = response.css(".lead-stories-section-right > div > .lead-stories-section-right-2 > article")
+            for index, news in zip(range(3), case3):
+                newobj = {"title": news.css("a::text").extract_first(),
+                        "custom_link": "http://" + domain + news.css("a::attr(href)").extract_first(),
+                          "slug": news.css("a::text").extract_first(),
+                          "status": "publish"
+                          }
+                title = (
+                    news.css("a::text").extract_first()).replace(",", "")
+                duplicate = duplicates(title)
+                if duplicate == 1:
+                     # data sender function
+                    sendData(newobj)
+                    addCounter(domain)
+                # yield deploy
+                newarray.append(newobj.copy())
+
+            newobj = {"title": response.css(".lead-stories-section-right > div > .lead-stories-section-right-1 > h1 > a::text").extract_first(),
+                        "custom_link": "http://" + domain + response.css(".lead-stories-section-right > div > .lead-stories-section-right-1 > h1 > a::attr(href)").extract_first(),
+                        "slug": response.css(".lead-stories-section-right > div > .lead-stories-section-right-1 > h1 > a::text").extract_first(),
+                          "status": "publish"
+                          }
+            title = (response.css(".lead-stories-section-right > div > .lead-stories-section-right-1 > h1 > a::text").extract_first()).replace(",", "")
             duplicate = duplicates(title)
             if duplicate == 1:
                 # data sender function

@@ -1,27 +1,3 @@
-http://www.huffingtonpost.in/the-blog = Political section was not cleared (mixed up news)
-
-http://www.livemint.com/opinion = Error 403 Forbidden
-for
- response.css(".lead-stories-section-left > article")
-    res.css("a") text and href
-    
- response.css(".lead-stories-section-right > div > .lead-stories-section-right-2 > article")
-    res.css("a") text and href
-
- response.css(".lead-stories-section-right > div > .lead-stories-section-right-1 > h1 > a") text and href
-
-http://www.rediff.com/news/interviews10.html = CSS not returning anything
-http://www.rediff.com/news/columns10.html = 
-
-for
-response.css(".incolumn")
-    res = response.css(".column")
-    for res in range 2
-        r.css("div > div > p > a") href and text
-
-
-"https://www.dnaindia.com/analysis",  //forbidden
-
 
 "http://www.financialexpress.com/print/edits-columns" = no accesible css
 
