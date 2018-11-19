@@ -1,0 +1,7 @@
+countersReport
+crawlers
+csvExportFile
+databaseConnector
+duplicateCheck
+errorHandling
+makefolder

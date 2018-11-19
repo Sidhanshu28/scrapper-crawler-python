@@ -1,0 +1,4 @@
+js2xml==0.2.1
+extruct==0.1.0
+requests==2.8.1
+twisted==18.9.0
