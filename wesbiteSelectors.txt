@@ -145,3 +145,5 @@ response.css(".leadstory > h6 > a") href and text
 for range 6
 response.css(".opi-story")
     res.css("h6 > a") text and href
+
+local  =IJnJFAP$)4oqsRXoc1zZhmb&

@@ -57,7 +57,7 @@ class ScrapSpider(scrapy.Spider):
         headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0'}
         for url in urls:
             request = scrapy.Request(
-                url=url, callback=self.parse, headers=headers)
+                url=url, callback=self.parse,errback= errback_httpbin, headers=headers)
             yield request
 
     def parse(self, response):
@@ -79,6 +79,7 @@ class ScrapSpider(scrapy.Spider):
                          }
                 title = (news.css("a > h3::text").extract_first()
                          ).replace(",", "")
+                title = title.replace("&","")
                 duplicate = duplicates(title)
 
                 if duplicate == 1:
@@ -96,6 +97,7 @@ class ScrapSpider(scrapy.Spider):
 
                 title = (news.css("a > h3::text").extract_first()
                          ).replace(",", "")
+                title = title.replace("&","")
                 duplicate = duplicates(title)
                 if duplicate == 1:
                     # data sender function
@@ -117,6 +119,7 @@ class ScrapSpider(scrapy.Spider):
                              }
                 title = (news.css(
                     "div.storybox > div.storytext > h2 > a::text").extract_first()).replace(",", "")
+                title = title.replace("&","")
                 duplicate = duplicates(title)
                 if duplicate == 1:
                      # data sender function
