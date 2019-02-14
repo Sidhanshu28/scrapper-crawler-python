@@ -73,7 +73,7 @@ class ScrapSpider(scrapy.Spider):
             res2 = case.css('div.opnionTopBig')
             for news in res:
                 dcobj = {"title": news.css("a > h3::text").extract_first(),
-                         "custom_link": urlhead + domain + news.css("a::attr(href)").extract_first(),
+                         "source_link": urlhead + domain + news.css("a::attr(href)").extract_first(),
                          "slug": news.css("a > h3::text").extract_first(),
                          "status": "publish"
                          }
@@ -90,7 +90,7 @@ class ScrapSpider(scrapy.Spider):
                 deccanchroniclearray.append(dcobj.copy())
             for news in res2:
                 dcobj = {"title": news.css("a > h3::text").extract_first(),
-                         "custom_link": urlhead + domain + news.css("a::attr(href)").extract_first(),
+                         "source_link": urlhead + domain + news.css("a::attr(href)").extract_first(),
                          "slug": news.css("a > h3::text").extract_first(),
                          "status": "publish"
                          }
@@ -113,7 +113,7 @@ class ScrapSpider(scrapy.Spider):
             dailyoarray = []
             case2 = response.css('div#story_container > div > div.story-list')
             for index, news in zip(range(5), case2):
-                dailyoobj = {"title": news.css("div.storybox > div.storytext > h2 > a::text").extract_first(),                                  "custom_link": urlhead + domain + news.css("div.storybox > div.storytext > h2 > a::attr(href)") .extract_first(),
+                dailyoobj = {"title": news.css("div.storybox > div.storytext > h2 > a::text").extract_first(),                                  "source_link": urlhead + domain + news.css("div.storybox > div.storytext > h2 > a::attr(href)") .extract_first(),
                              "slug": news.css("div.storybox > div.storytext > h2 > a::text").extract_first(),
                              "status": "publish"
                              }
@@ -135,7 +135,7 @@ class ScrapSpider(scrapy.Spider):
             forbesarray = []
             case2 = response.css(".carousel > .carousel-inner > .item")
             for index, news in zip(range(5), case2):
-                forbesobj = {"title": news.css(".carousel-caption > h3 > a::text").extract_first(),                                             "custom_link": urlhead + domain + news.css(".carousel-caption > h3 > a::attr(href)").extract_first(),
+                forbesobj = {"title": news.css(".carousel-caption > h3 > a::text").extract_first(),                                             "source_link": urlhead + domain + news.css(".carousel-caption > h3 > a::attr(href)").extract_first(),
                              "slug": news.css(".carousel-caption > h3 > a::text").extract_first(),
                              "status": "publish"
                              }
@@ -156,7 +156,7 @@ class ScrapSpider(scrapy.Spider):
             frontlinearray = []
             case2 = response.css(".latestInner")
             for index, news in zip(range(5), case2):
-                frontlineobj = {"title": news.css("h2 > a::text").extract_first(),                                                                 "custom_link": news.css("h2 > a::attr(href)").extract_first(),
+                frontlineobj = {"title": news.css("h2 > a::text").extract_first(),                                                                 "source_link": news.css("h2 > a::attr(href)").extract_first(),
                                 "slug": news.css("h2 > a::text").extract_first(),
                                 "status": "publish"
                                 }
@@ -178,7 +178,7 @@ class ScrapSpider(scrapy.Spider):
             htarray = []
             case2 = response.css(".media-heading")
             for index, news in zip(range(3), case2):
-                htobj = {"title": news.css("a::text").extract_first(),                                                                 "custom_link": news.css("a::attr(href)").extract_first(),
+                htobj = {"title": news.css("a::text").extract_first(),                                                                 "source_link": news.css("a::attr(href)").extract_first(),
                          "slug": news.css("a::text").extract_first(),
                          "status": "publish"
                          }
@@ -199,7 +199,7 @@ class ScrapSpider(scrapy.Spider):
             ndtvarray = []
             case2 = response.css(".nopinion")
             for index, news in zip(range(5), case2):
-                ndtvobj = {"title": news.css(".opinion_blog_contentwrap > .opinion_blog_header > a::text").extract_first(),            "custom_link": news.css(".opinion_blog_contentwrap > .opinion_blog_header > a::attr(href)").extract_first(),
+                ndtvobj = {"title": news.css(".opinion_blog_contentwrap > .opinion_blog_header > a::text").extract_first(),            "source_link": news.css(".opinion_blog_contentwrap > .opinion_blog_header > a::attr(href)").extract_first(),
                            "slug": news.css(".opinion_blog_contentwrap > .opinion_blog_header > a::text").extract_first(),
                            "status": "publish"
                            }
@@ -220,7 +220,7 @@ class ScrapSpider(scrapy.Spider):
             n18array = []
             case2 = response.css(".author-list")
             for index, news in zip(range(5), case2):
-                n18obj = {"title": news.css("div.item-wrap > .item-front > .item-cont > h3 > a::text").extract_first(),            "custom_link": news.css("div.item-wrap > .item-front > .item-cont > h3 > a::attr(href)").extract_first(),
+                n18obj = {"title": news.css("div.item-wrap > .item-front > .item-cont > h3 > a::text").extract_first(),            "source_link": news.css("div.item-wrap > .item-front > .item-cont > h3 > a::attr(href)").extract_first(),
                           "slug": news.css("div.item-wrap > .item-front > .item-cont > h3 > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -242,7 +242,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".listing > ul > li")
             for index, news in zip(range(2), case2):
                 oliobj = {"title": news.css(".content_serach > .cont_head > a::text").extract_first(),            
-                "custom_link": "http://"+ domain + news.css(".content_serach > .cont_head > a::attr(href)").extract_first(),
+                "source_link": "http://"+ domain + news.css(".content_serach > .cont_head > a::attr(href)").extract_first(),
                           "slug": news.css(".content_serach > .cont_head > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -264,7 +264,7 @@ class ScrapSpider(scrapy.Spider):
             # case2 = response.css(".listing > ul > li")
             # for index, news in zip(range(5), case2):
             newobj = {"title": response.css(".featured-story > a >.row-story > h1::text").extract_first(),
-                      "custom_link": response.css(".featured-story > a::attr(href)").extract_first(),
+                      "source_link": response.css(".featured-story > a::attr(href)").extract_first(),
                       "slug": response.css(".featured-story > a >.row-story > h1::text").extract_first(),
                       "status": "publish"
                       }
@@ -282,7 +282,7 @@ class ScrapSpider(scrapy.Spider):
                 ".listing > ul > li.basic-collection-stories > ul > li")
             for index, news in zip(range(3), case2):
                 newobj = {"title": news.css("a > div.raw-story-meta > h1::text").extract_first(),
-                          "custom_link": news.css("a::attr(href)").extract_first(),
+                          "source_link": news.css("a::attr(href)").extract_first(),
                           "slug": news.css("a > div.raw-story-meta > h1::text").extract_first(),
                           "status": "publish"
                           }
@@ -303,7 +303,7 @@ class ScrapSpider(scrapy.Spider):
             newarray = []
             case2 = response.css(".article")
             for index, news in zip(range(5), case2):
-                newobj = {"title": news.css(".media-body > .media-heading > a::text").extract_first(),                              "custom_link": news.css(".media-body > .media-heading > a::attr(href)").extract_first(),
+                newobj = {"title": news.css(".media-body > .media-heading > a::text").extract_first(),                              "source_link": news.css(".media-body > .media-heading > a::attr(href)").extract_first(),
                           "slug": news.css(".media-body > .media-heading > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -324,7 +324,7 @@ class ScrapSpider(scrapy.Spider):
             newarray = []
             # case2 = response.css(".article")
             # for index, news in zip(range(5), case2):
-            newobj = {"title": response.css(".listtopbox > .pstsummary > .lsttitle > a::text").extract_first(),                              "custom_link": response.css(".listtopbox > .pstsummary > .lsttitle > a::attr(href)").extract_first(),
+            newobj = {"title": response.css(".listtopbox > .pstsummary > .lsttitle > a::text").extract_first(),                              "source_link": response.css(".listtopbox > .pstsummary > .lsttitle > a::attr(href)").extract_first(),
                         "slug": response.css(".listtopbox > .pstsummary > .lsttitle > a::text").extract_first(),
                         "status": "publish"
                         }
@@ -342,7 +342,7 @@ class ScrapSpider(scrapy.Spider):
 
             case2 = response.css(".lstitemt")
             for index, news in zip(range(5), case2):
-                newobj = {"title": news.css(".listcontent > .lstitems > a::text").extract_first(),                              "custom_link": news.css(".listcontent > .lstitems > a::attr(href)").extract_first(),
+                newobj = {"title": news.css(".listcontent > .lstitems > a::text").extract_first(),                              "source_link": news.css(".listcontent > .lstitems > a::attr(href)").extract_first(),
                         "slug": news.css(".listcontent > .lstitems > a::text").extract_first(),
                         "status": "publish"
                         }
@@ -364,7 +364,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".ES2-100x4-text1")
             for index, news in zip(range(5), case2):
                 newobj = {"title": news.css("h2 > a::text").extract_first(),
-                        "custom_link": news.css("h2 > a::attr(href)").extract_first(),
+                        "source_link": news.css("h2 > a::attr(href)").extract_first(),
                           "slug": news.css("h2 > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -386,7 +386,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css("h2.op-title")
             for index, news in zip(range(5), case2):
                 newobj = {"title": news.css("a::text").extract_first(),
-                        "custom_link": news.css("a::attr(href)").extract_first(),
+                        "source_link": news.css("a::attr(href)").extract_first(),
                           "slug": news.css("a::text").extract_first(),
                           "status": "publish"
                           }
@@ -408,7 +408,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css("h2.op-title")
             for index, news in zip(range(3), case2):
                 newobj = {"title": news.css("a::text").extract_first(),
-                        "custom_link": news.css("a::attr(href)").extract_first(),
+                        "source_link": news.css("a::attr(href)").extract_first(),
                           "slug": news.css("a::text").extract_first(),
                           "status": "publish"
                           }
@@ -423,7 +423,7 @@ class ScrapSpider(scrapy.Spider):
                 newarray.append(newobj.copy())
 
             newobj = {"title": response.css("h2.ed-ts > a::text").extract_first(),
-                        "custom_link": response.css("h2.ed-ts > a::attr(href)").extract_first(),
+                        "source_link": response.css("h2.ed-ts > a::attr(href)").extract_first(),
                           "slug": response.css("h2.ed-ts > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -444,7 +444,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".opinionsubldbx")
             for index, news in zip(range(3), case2):
                 newobj = {"title": news.css("h3 > a::text").extract_first(),
-                        "custom_link": "https://" + domain + news.css("h3 > a::attr(href)").extract_first(),
+                        "source_link": "https://" + domain + news.css("h3 > a::attr(href)").extract_first(),
                           "slug": news.css("h3 > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -459,7 +459,7 @@ class ScrapSpider(scrapy.Spider):
                 newarray.append(newobj.copy())
 
             newobj = {"title": response.css(".opiniontpbx > h3 > a::text").extract_first(),
-                        "custom_link": "https://" + domain + response.css(".opiniontpbx > h3 > a::attr(href)").extract_first(),
+                        "source_link": "https://" + domain + response.css(".opiniontpbx > h3 > a::attr(href)").extract_first(),
                           "slug": response.css(".opiniontpbx > h3 > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -480,7 +480,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".panel-body > ul.single-column > li")
             for index, news in zip(range(3), case2):
                 newobj = {"title": news.css("a > p::text").extract_first(),
-                        "custom_link": news.css("a::attr(href)").extract_first(),
+                        "source_link": news.css("a::attr(href)").extract_first(),
                           "slug": news.css("a > p::text").extract_first(),
                           "status": "publish"
                           }
@@ -495,7 +495,7 @@ class ScrapSpider(scrapy.Spider):
                 newarray.append(newobj.copy())
 
             newobj = {"title": response.css(".news-item > a > h1::text").extract_first(),
-                        "custom_link": response.css(".news-item > a::attr(href)").extract_first(),
+                        "source_link": response.css(".news-item > a::attr(href)").extract_first(),
                           "slug": response.css(".news-item > a > h1::text").extract_first(),
                           "status": "publish"
                           }
@@ -516,7 +516,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".storyDetailsRight")
             for index, news in zip(range(3), case2):
                 newobj = {"title": news.css("h3 > a::text").extract_first(),
-                        "custom_link": "https://"+ domain + news.css("h3 > a::attr(href)").extract_first(),
+                        "source_link": "https://"+ domain + news.css("h3 > a::attr(href)").extract_first(),
                           "slug": news.css("h3 > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -531,7 +531,7 @@ class ScrapSpider(scrapy.Spider):
                 newarray.append(newobj.copy())
 
             newobj = {"title": response.css(".storyDetailsLeft > h3 > a::text").extract_first(),
-                        "custom_link": "https://"+ domain + response.css(".storyDetailsLeft > h3 > a::attr(href)").extract_first(),
+                        "source_link": "https://"+ domain + response.css(".storyDetailsLeft > h3 > a::attr(href)").extract_first(),
                           "slug": response.css(".storyDetailsLeft > h3 > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -552,7 +552,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".card__title")
             for index, news in zip(range(3), case2):
                 newobj = {"title": news.css("a::text").extract_first(),
-                        "custom_link": "https://"+ domain + news.css("a::attr(href)").extract_first(),
+                        "source_link": "https://"+ domain + news.css("a::attr(href)").extract_first(),
                           "slug": news.css("a::text").extract_first(),
                           "status": "publish"
                           }
@@ -574,7 +574,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".OpLeft > h2")
             for index, news in zip(range(5), case2):
                 newobj = {"title": news.css("a::text").extract_first(),
-                        "custom_link": "https://" + domain + news.css("a::attr(href)").extract_first(),
+                        "source_link": "https://" + domain + news.css("a::attr(href)").extract_first(),
                           "slug": news.css("a::text").extract_first(),
                           "status": "publish"
                           }
@@ -596,7 +596,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".article")
             for index, news in zip(range(5), case2):
                 newobj = {"title": news.css(".media-body > .media-heading > a::text").extract_first(),
-                        "custom_link": news.css(".media-body > .media-heading > a::attr(href)").extract_first(),
+                        "source_link": news.css(".media-body > .media-heading > a::attr(href)").extract_first(),
                           "slug": news.css(".media-body > .media-heading > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -618,7 +618,7 @@ class ScrapSpider(scrapy.Spider):
             # case2 = response.css(".article")
             # for index, news in zip(range(5), case2):
             newobj = {"title": response.css(".BigNews > h2 > a::text").extract_first(),
-                      "custom_link": "https://" + domain + "/columnists" + response.css(".BigNews > h2 > a::attr(href)").extract_first(),
+                      "source_link": "https://" + domain + "/columnists" + response.css(".BigNews > h2 > a::attr(href)").extract_first(),
                         "slug": response.css(".BigNews > h2 > a::text").extract_first(),
                         "status": "publish"
                         }
@@ -640,7 +640,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".sub_opinion_main")
             for index, news in zip(range(3), case2):
                 newobj = {"title": news.css("h5 > a::text").extract_first(),
-                        "custom_link": news.css("h5 > a::attr(href)").extract_first(),
+                        "source_link": news.css("h5 > a::attr(href)").extract_first(),
                           "slug": news.css("h5 > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -662,7 +662,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".imgpost")
             for index, news in zip(range(3), case2):
                 newobj = {"title": news.css(".textbox > p > a::text").extract_first(),
-                        "custom_link": news.css(".textbox > p > a::attr(href)").extract_first(),
+                        "source_link": news.css(".textbox > p > a::attr(href)").extract_first(),
                           "slug": news.css(".textbox > p > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -684,7 +684,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".opi-story")
             for index, news in zip(range(3), case2):
                 newobj = {"title": news.css("h6 > a::text").extract_first(),
-                        "custom_link": news.css("h6 > a::attr(href)").extract_first(),
+                        "source_link": news.css("h6 > a::attr(href)").extract_first(),
                           "slug": news.css("h6 > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -699,7 +699,7 @@ class ScrapSpider(scrapy.Spider):
                 newarray.append(newobj.copy())
 
             newobj = {"title": response.css(".leadstory > h6 > a::text").extract_first(),
-                        "custom_link": response.css(".leadstory > h6 > a::attr(href)").extract_first(),
+                        "source_link": response.css(".leadstory > h6 > a::attr(href)").extract_first(),
                           "slug": response.css(".leadstory > h6 > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -720,7 +720,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".column")
             for index, news in zip(range(3), case2):
                 newobj = {"title": news.css(".outborder > .ingap > p > a::text").extract_first(),
-                        "custom_link": news.css(".outborder > .ingap > p > a::attr(href)").extract_first(),
+                        "source_link": news.css(".outborder > .ingap > p > a::attr(href)").extract_first(),
                           "slug": news.css(".outborder > .ingap > p > a::text").extract_first(),
                           "status": "publish"
                           }
@@ -744,7 +744,7 @@ class ScrapSpider(scrapy.Spider):
             for index,news in zip(range(30),case2):
                 self.log(news.css("a::text").extract_first())
                 newobj = {"title": news.css("a::text").extract_first(),
-                        "custom_link": news.css("a::attr(href)").extract_first(),
+                        "source_link": news.css("a::attr(href)").extract_first(),
                           "slug": news.css("a::text").extract_first(),
                           "status": "draft"
                           }
@@ -766,7 +766,7 @@ class ScrapSpider(scrapy.Spider):
             case2 = response.css(".lead-stories-section-left > article")
             for index, news in zip(range(3), case2):
                 newobj = {"title": news.css("a::text").extract_first(),
-                        "custom_link": "http://" + domain + news.css("a::attr(href)").extract_first(),
+                        "source_link": "http://" + domain + news.css("a::attr(href)").extract_first(),
                           "slug": news.css("a::text").extract_first(),
                           "status": "publish"
                           }
@@ -783,7 +783,7 @@ class ScrapSpider(scrapy.Spider):
             case3 = response.css(".lead-stories-section-right > div > .lead-stories-section-right-2 > article")
             for index, news in zip(range(3), case3):
                 newobj = {"title": news.css("a::text").extract_first(),
-                        "custom_link": "http://" + domain + news.css("a::attr(href)").extract_first(),
+                        "source_link": "http://" + domain + news.css("a::attr(href)").extract_first(),
                           "slug": news.css("a::text").extract_first(),
                           "status": "publish"
                           }
@@ -798,7 +798,7 @@ class ScrapSpider(scrapy.Spider):
                 newarray.append(newobj.copy())
 
             newobj = {"title": response.css(".lead-stories-section-right > div > .lead-stories-section-right-1 > h1 > a::text").extract_first(),
-                        "custom_link": "http://" + domain + response.css(".lead-stories-section-right > div > .lead-stories-section-right-1 > h1 > a::attr(href)").extract_first(),
+                        "source_link": "http://" + domain + response.css(".lead-stories-section-right > div > .lead-stories-section-right-1 > h1 > a::attr(href)").extract_first(),
                         "slug": response.css(".lead-stories-section-right > div > .lead-stories-section-right-1 > h1 > a::text").extract_first(),
                           "status": "publish"
                           }
